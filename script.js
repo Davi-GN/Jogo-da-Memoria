@@ -3,9 +3,9 @@ const modal = document.getElementById("modal");
 const message = document.getElementById("endMessage");
 
 const cardsData = [
-    { id: 0, img: "url" }, { id: 0, img: "url" },
-    { id: 1, img: "url" }, { id: 1, img: "url" },
-    { id: 2, img: "url" }, { id: 2, img: "url" },
+    { id: 1, content: "I" }, { id: 1, content: "I" },
+    { id: 2, content: "II" }, { id: 2, content: "II" },
+    { id: 3, content: "III" }, { id: 3, content: "III" },
 ];
 
 const initialValue = {
@@ -29,6 +29,8 @@ const renderCard = (parent, card) => {
     let node = document.createElement("div");
     node.id = card.id;
     node.classList.add("card");
+    node.classList.add("flex");
+    node.classList.add("center");
     parent.appendChild(node);
 };
 
@@ -40,9 +42,24 @@ const delay = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms));
 };
 
+const romanize = (num) => {
+    if (isNaN(num))
+        return NaN;
+    var digits = String(+num).split(""),
+        key = ["","C","CC","CCC","CD","D","DC","DCC","DCCC","CM",
+               "","X","XX","XXX","XL","L","LX","LXX","LXXX","XC",
+               "","I","II","III","IV","V","VI","VII","VIII","IX"],
+        roman = "",
+        i = 3;
+    while (i--)
+        roman = (key[+digits.pop() + (i * 10)] || "") + roman;
+    return Array(+digits.join("") + 1).join("M") + roman;
+}
+
 cards.forEach( target => {
     target.addEventListener("click", (e) => {
         target.classList.add("flipped");
+        target.innerHTML = romanize(target.id);
         flipped.push(e.target);
         checkStatus();
     });
@@ -90,6 +107,7 @@ const checkStatus = async () => {
             await delay(300);
             flipped.forEach(card => {
                 card.classList.remove("flipped");
+                card.innerHTML = "";
             })
             counter -= 1;
             renderCounter();
