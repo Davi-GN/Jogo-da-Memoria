@@ -1,5 +1,4 @@
 const container = document.getElementById("container");
-const counter = document.getElementById("try");
 const button = document.getElementById("button");
 
 const cardsData = [
@@ -7,6 +6,18 @@ const cardsData = [
     { id: 1, img: "url" }, { id: 1, img: "url" },
     { id: 2, img: "url" }, { id: 2, img: "url" },
 ];
+
+const initialValue = {
+    tries: 8
+};
+
+var counter = initialValue.tries;
+
+const renderTry = () => {
+    const tries = document.getElementById("try");
+    tries.innerHTML = counter;
+};
+renderTry();
 
 const card = (parent, card) => {
     let node = document.createElement("div");
@@ -19,8 +30,8 @@ cardsData.forEach(target => card(container, target));
 const cards = document.querySelectorAll(".card");
 
 
-cards.forEach(() => {
-    addEventListener("click", (e) => {
-        console.log(e.target);
-    })
+cards.forEach( target => {
+    target.addEventListener("click", (e) => {
+        target.style.background = "#fafa";
+    });
 });
