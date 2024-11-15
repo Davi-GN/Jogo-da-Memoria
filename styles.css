@@ -47,7 +47,12 @@ main {
 }
 .card:hover {
     rotate: 3deg;
-    transition: rotate 100ms;
+    transition: rotate 100ms, transform 300ms;
+}
+.flipped {
+    background: #fafa;
+    transform: rotateY(180deg);
+    transition: transform 300ms;
 }
 
 .flex {
