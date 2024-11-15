@@ -15,6 +15,7 @@ const initialValue = {
 };
 
 var flipped = [];
+var allCounter = 0;
 var counter = initialValue.tries;
 var endMessage = initialValue.endMessage;
 var modalColor = initialValue.modalColor;
@@ -90,7 +91,7 @@ const checkCompletion = async () => {
         openModal(true);
 
         await delay(1000);
-        location.reload();
+        reset();
     }
 
     if (counter === 0 ) {
@@ -100,12 +101,20 @@ const checkCompletion = async () => {
         openModal(true);
 
         await delay(1000);
-        location.reload();
+        reset();
     }
 };
 
 const checkStatus = async () => {
     if (flipped.length === 2) {
+        allCounter += 1;
+        let recentFlip = [];
+        flipped.forEach( v => {
+            recentFlip.push(v.id);
+        });
+        localStorage.setItem(allCounter, recentFlip)
+        console.log(`Tentativa nº ${allCounter}: `+localStorage.getItem(allCounter));
+
         if (flipped.every(i => i.id === flipped[0].id)) {
             flipped = [];
             checkCompletion();
@@ -121,4 +130,9 @@ const checkStatus = async () => {
             checkCompletion();
         }
     }
+};
+
+const reset = () => {
+    location.reload();
+    localStorage.clear();
 };
