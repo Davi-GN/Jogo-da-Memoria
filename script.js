@@ -56,7 +56,8 @@ const checkStatus = () => {
             flipped.forEach(card => {
                 card.classList.remove("flipped");
             })
-
+            counter -= 1;
+            renderCounter();
             flipped = [];
         }
     }
