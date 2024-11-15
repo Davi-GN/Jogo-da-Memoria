@@ -1,5 +1,6 @@
 const container = document.getElementById("container");
-const button = document.getElementById("button");
+const modal = document.getElementById("modal");
+const message = document.getElementById("endMessage");
 
 const cardsData = [
     { id: 0, img: "url" }, { id: 0, img: "url" },
@@ -8,11 +9,15 @@ const cardsData = [
 ];
 
 const initialValue = {
-    tries: 8
+    tries: 8,
+    endMessage: "Você Ganhou",
+    modalColor: "greenyellow",
 };
 
 var flipped = [];
 var counter = initialValue.tries;
+var endMessage = initialValue.endMessage;
+var modalColor = initialValue.modalColor;
 
 const renderCounter = () => {
     const tries = document.getElementById("try");
@@ -36,29 +41,60 @@ const delay = (ms) => {
 };
 
 cards.forEach( target => {
-    target.addEventListener("click", async (e) => {
+    target.addEventListener("click", (e) => {
         target.classList.add("flipped");
         flipped.push(e.target);
-
-        await delay(1000);
         checkStatus();
     });
 });
 
-const checkStatus = () => {
+const openModal = (open) => {
+    if (open == true) {
+        message.innerHTML = endMessage;
+        modal.style.color = modalColor;
+        modal.style.display = "flex";
+        modal.style.opacity = 1;
+    } else {
+        modal.style.display = "none";
+        modal.style.opacity = 0;
+    }
+};
+
+const checkCompletion = async () => {
+    const containsFlipped = document.querySelectorAll(".flipped");
+    console.log(containsFlipped.length)
+    if (containsFlipped.length === 6 ) {
+        openModal(true);
+
+        await delay(1000);
+        location.reload();
+    }
+
+    if (counter === 0 ) {
+        endMessage = "Você Perdeu!";
+        modalColor = "red";
+
+        openModal(true);
+
+        await delay(1000);
+        location.reload();
+    }
+};
+
+const checkStatus = async () => {
     if (flipped.length === 2) {
         if (flipped.every(i => i.id === flipped[0].id)) {
-            console.log(flipped)
-            console.log("sucesso");
             flipped = [];
+            checkCompletion();
         } else {
-            console.log(flipped);
+            await delay(300);
             flipped.forEach(card => {
                 card.classList.remove("flipped");
             })
             counter -= 1;
             renderCounter();
             flipped = [];
+            checkCompletion();
         }
     }
 };
